@@ -1,26 +1,66 @@
 package br.com.jadlog.signature;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.widget.ImageView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import br.com.jadlog.signature.ui.EncodeImage;
 
+@EActivity(R.layout.activity_finally)
 public class FinallyActivity extends AppCompatActivity {
+    @ViewById(R.id.toolbar)
+    protected Toolbar toolbar;
 
-    private EncodeImage encodeImage = new EncodeImage();
+    protected ActionBar actionBar;
+
+    @ViewById(R.id.imageView)
+    protected ImageView imageView;
+
+    @AfterViews
+    protected void afterViews() {
+        final String hash   = getIntent().getStringExtra("HASH");
+        final Bitmap bitmap = new EncodeImage().decodeImageBase64(hash);
+
+        imageView.setImageBitmap(bitmap);
+
+        actionBar();
+    }
+
+    private void actionBar() {
+        // toolbar
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setTitle("");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+    }
+
+    private void back() {
+        startActivity(new Intent(this, MainActivity_.class));
+        finish();
+        overridePendingTransition( R.anim.lefttoright, R.anim.stable );
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finally);
+    public boolean onSupportNavigateUp() {
+        back();
+        return true;
+    }
 
-        String hash = getIntent().getStringExtra("HASH");
-
-        Bitmap bitmap = encodeImage.decodeImageBase64(hash);
-
-        ImageView imageView = findViewById(R.id.imageView);
-                  imageView.setImageBitmap(bitmap);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { back(); return false; }
+        else                                  { return super.onKeyDown(keyCode, event); }
     }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:padding="10dp"
+  android:gravity="center">
+  <Button
+    android:id="@+id/btnClear"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="@string/signature_btn1"
+    android:textColor="@color/colorPrimary"
+    android:textSize="16sp"
+    android:textAppearance="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse"
+    android:background="@drawable/btn_clear" />
+  <Button
+    android:id="@+id/btnSave"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_weight="1"
+    android:text="@string/signature_btn12"
+    android:textColor="@color/colorAccent"
+    android:textSize="16sp"
+    android:textAppearance="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse"
+    android:background="@drawable/btn_save" />
+</LinearLayout>

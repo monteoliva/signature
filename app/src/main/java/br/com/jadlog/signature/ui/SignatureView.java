@@ -3,14 +3,16 @@ package br.com.jadlog.signature.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import br.com.jadlog.signature.R;
 
 public class SignatureView extends View {
     // set the stroke width
@@ -34,15 +36,17 @@ public class SignatureView extends View {
      *
      * @param context
      */
-    public SignatureView(Context context)                               { super(context);         init(); }
-    public SignatureView(Context context, @Nullable AttributeSet attrs) {  super(context, attrs); init(); }
+    public SignatureView(Context context)                               { super(context);        init(); }
+    public SignatureView(Context context, @Nullable AttributeSet attrs) { super(context, attrs); init(); }
 
     private void init() {
-        paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(STROKE_WIDTH);
+      int color = ContextCompat.getColor(getContext(), R.color.colorLine);
+
+      paint.setAntiAlias(true);
+      paint.setColor(color);
+      paint.setStyle(Paint.Style.STROKE);
+      paint.setStrokeJoin(Paint.Join.ROUND);
+      paint.setStrokeWidth(STROKE_WIDTH);
     }
 
     @Override
@@ -111,7 +115,6 @@ public class SignatureView extends View {
                 break;
 
             default:
-
                 return false;
         }
 

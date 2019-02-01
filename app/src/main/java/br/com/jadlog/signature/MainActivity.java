@@ -2,50 +2,73 @@ package br.com.jadlog.signature;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
 
 import br.com.jadlog.signature.ui.SignatureView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private SignatureView signatureView;
-    private Button btnClear;
-    private Button btnSave;
+@EActivity(R.layout.activity_main)
+@OptionsMenu(R.menu.menu_main)
+public class MainActivity extends AppCompatActivity {
+    @ViewById(R.id.toolbar)
+    protected Toolbar toolbar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected ActionBar actionBar;
 
-        signatureView = findViewById(R.id.signature);
+    @ViewById(R.id.signature)
+    protected SignatureView signatureView;
 
-        btnClear = findViewById(R.id.btnClear);
-        btnClear.setOnClickListener(this);
+    @AfterViews
+    protected void afterViews() {
+        // toolbar
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
 
-        btnSave  = findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == btnClear) {
-            signatureView.clear();
-        }
-        else if (v == btnSave) {
-            save();
+        if (actionBar != null) {
+            actionBar.setTitle("");
         }
     }
 
-    private void save() {
+    @Click(R.id.btnClear)
+    protected void clear() {
+        signatureView.clear();
+    }
+
+    @Click(R.id.btnSave)
+    protected void save() {
         String hash = signatureView.getHash();
 
         Log.d("Signature","HASH: " + hash);
 
-        Intent intent = new Intent(this, FinallyActivity.class);
-        intent.putExtra("HASH", hash);
+        Intent intent = new Intent(this, FinallyActivity_.class);
+               intent.putExtra("HASH", hash);
 
         startActivity(intent);
+        finish();
+        overridePendingTransition( R.anim.righttoleft, R.anim.stable );
+    }
+
+    @OptionsItem(R.id.action_close)
+    protected void close() {
+        finish();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { finish(); return false; }
+        else                                  { return super.onKeyDown(keyCode, event); }
     }
 }

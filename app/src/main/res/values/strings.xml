@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Signature</string>
+    <string name="signature_title">ASSINATURA DO CLIENTE</string>
+    <string name="signature_btn1">Limpar</string>
+    <string name="signature_btn12">Salvar</string>
+    <string name="action_close">Salvar</string>
+    <string name="finally_title">RESULTADO</string>
 </resources>

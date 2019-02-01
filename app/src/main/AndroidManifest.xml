@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivity_"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FinallyActivity"
+            android:name=".FinallyActivity_"
             android:screenOrientation="landscape" />
     </application>
 
