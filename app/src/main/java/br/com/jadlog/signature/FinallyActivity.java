@@ -3,7 +3,6 @@ package br.com.jadlog.signature;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.ImageView;
@@ -15,7 +14,7 @@ import org.androidannotations.annotations.ViewById;
 import br.com.jadlog.signature.ui.EncodeImage;
 
 @EActivity(R.layout.activity_finally)
-public class FinallyActivity extends AppCompatActivity {
+public class FinallyActivity extends CordovaActivity {
     @ViewById(R.id.toolbar)
     protected Toolbar toolbar;
 

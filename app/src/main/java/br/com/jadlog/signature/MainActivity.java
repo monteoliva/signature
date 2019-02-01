@@ -1,15 +1,10 @@
 package br.com.jadlog.signature;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -22,7 +17,7 @@ import br.com.jadlog.signature.ui.SignatureView;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.menu_main)
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends CordovaActivity {
     @ViewById(R.id.toolbar)
     protected Toolbar toolbar;
 
