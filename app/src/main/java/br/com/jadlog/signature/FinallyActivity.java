@@ -13,7 +13,7 @@ import org.androidannotations.annotations.ViewById;
 
 import br.com.jadlog.signature.ui.EncodeImage;
 
-@EActivity(R.layout.activity_finally)
+@EActivity(R.layout.finally_activity)
 public class FinallyActivity extends CordovaActivity {
     @ViewById(R.id.toolbar)
     protected Toolbar toolbar;
@@ -46,7 +46,7 @@ public class FinallyActivity extends CordovaActivity {
     }
 
     private void back() {
-        startActivity(new Intent(this, MainActivity_.class));
+        startActivity(new Intent(this, SignatureActivity_.class));
         finish();
         overridePendingTransition( R.anim.lefttoright, R.anim.stable );
     }

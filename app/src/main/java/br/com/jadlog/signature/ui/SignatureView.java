@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -56,16 +57,19 @@ public class SignatureView extends View {
     }
 
     public String getHash() {
-        return encodeImage.encodeImage(getBitmap());
+        Bitmap bmp = getBitmap();
+
+        return (bmp != null) ? encodeImage.encodeImage(bmp) : "";
     }
 
-    public Bitmap getBitmap() {
-        final Bitmap signatureBitmap = Bitmap.createBitmap(withSize, heightSize, Bitmap.Config.ARGB_8888);
+    private Bitmap getBitmap() {
+        Bitmap signatureBitmap = Bitmap.createBitmap(withSize, heightSize, Bitmap.Config.ARGB_8888);
 
-        // important for saving signature
-        final Canvas canvas = new Canvas(signatureBitmap);
+        this.draw(new Canvas(signatureBitmap));
 
-        this.draw(canvas);
+        Bitmap emptyBitmap = Bitmap.createBitmap(withSize, heightSize, signatureBitmap.getConfig());
+
+        if (signatureBitmap.sameAs(emptyBitmap)) { return null; }
 
         return signatureBitmap;
     }
