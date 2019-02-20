@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 
@@ -27,6 +28,9 @@ public class FinallyActivity extends CordovaActivity {
     protected void afterViews() {
         final String hash   = getIntent().getStringExtra("HASH");
         final Bitmap bitmap = new EncodeImage().decodeImageBase64(hash);
+
+        Log.d("HASH",hash);
+
 
         imageView.setImageBitmap(bitmap);
 
