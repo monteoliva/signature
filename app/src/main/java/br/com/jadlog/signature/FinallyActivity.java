@@ -2,6 +2,7 @@ package br.com.jadlog.signature;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,11 +27,8 @@ public class FinallyActivity extends CordovaActivity {
 
     @AfterViews
     protected void afterViews() {
-        final String hash   = getIntent().getStringExtra("HASH");
-        final Bitmap bitmap = new EncodeImage().decodeImageBase64(hash);
-
-        Log.d("HASH",hash);
-
+        final byte[] hash   = getIntent().getByteArrayExtra("HASH");
+        final Bitmap bitmap = BitmapFactory.decodeByteArray(hash, 0, hash.length);
 
         imageView.setImageBitmap(bitmap);
 
