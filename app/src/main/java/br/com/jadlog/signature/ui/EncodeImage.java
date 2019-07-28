@@ -8,19 +8,19 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 
 public class EncodeImage {
-    public String encodeImage(Bitmap bitmap){
-        String retorno = "";
+    public byte[] encodeImage(Bitmap bitmap){
+        byte[] retorno = null;
+
+        if (bitmap == null) { return null; }
 
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
 
-            byte[] bytes = stream.toByteArray();
-            retorno = encodeImage(bytes);
+            retorno = stream.toByteArray();
         }
         catch (Exception e) {
             Log.d("Signature", "Error encodeImage - " + e.getMessage());
-            //e.printStackTrace();
         }
 
         // retorna em branco

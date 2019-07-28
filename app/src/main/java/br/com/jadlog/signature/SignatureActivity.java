@@ -46,14 +46,12 @@ public class SignatureActivity extends CordovaActivity {
 
     @Click(R.id.btnSave)
     protected void save() {
-        String hash = signatureView.getHash();
+        byte[] hash = signatureView.getHash();
 
-        if (hash.isEmpty()) {
+        if (hash == null) {
             msg();
             return;
         }
-
-        Log.d("Signature","HASH: " + hash);
 
         Intent intent = new Intent(this, FinallyActivity_.class);
                intent.putExtra("HASH", hash);

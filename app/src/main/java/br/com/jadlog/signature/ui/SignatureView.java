@@ -56,10 +56,10 @@ public class SignatureView extends View {
         heightSize = h;
     }
 
-    public String getHash() {
+    public byte[] getHash() {
         Bitmap bmp = getBitmap();
 
-        return (bmp != null) ? encodeImage.encodeImage(bmp) : "";
+        return (bmp != null) ? encodeImage.encodeImage(bmp) : null;
     }
 
     private Bitmap getBitmap() {
