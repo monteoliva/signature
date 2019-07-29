@@ -3,33 +3,29 @@ package br.com.jadlog.signature;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
-import br.com.jadlog.signature.ui.EncodeImage;
-
-@EActivity(R.layout.finally_activity)
 public class FinallyActivity extends CordovaActivity {
-    @ViewById(R.id.toolbar)
-    protected Toolbar toolbar;
+    private Toolbar toolbar;
+    private ActionBar actionBar;
+    private ImageView imageView;
 
-    protected ActionBar actionBar;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @ViewById(R.id.imageView)
-    protected ImageView imageView;
+        setContentView(R.layout.finally_activity);
 
-    @AfterViews
-    protected void afterViews() {
         final byte[] hash   = getIntent().getByteArrayExtra("HASH");
         final Bitmap bitmap = BitmapFactory.decodeByteArray(hash, 0, hash.length);
 
+        toolbar   = findViewById(R.id.toolbar);
+        imageView = findViewById(R.id.imageView);
         imageView.setImageBitmap(bitmap);
 
         actionBar();
@@ -48,7 +44,7 @@ public class FinallyActivity extends CordovaActivity {
     }
 
     private void back() {
-        startActivity(new Intent(this, SignatureActivity_.class));
+        startActivity(new Intent(this, SignatureActivity.class));
         finish();
         overridePendingTransition( R.anim.lefttoright, R.anim.stable );
     }
