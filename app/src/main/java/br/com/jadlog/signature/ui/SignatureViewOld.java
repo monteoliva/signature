@@ -1,22 +1,22 @@
 package br.com.jadlog.signature.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import br.com.jadlog.signature.R;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
-public class SignatureView extends View {
+public class SignatureViewOld extends View {
     // set the stroke width
-    private static final float STROKE_WIDTH = 3f;
+    private static final float STROKE_WIDTH = 20f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
     private Paint paint = new Paint();
@@ -36,11 +36,11 @@ public class SignatureView extends View {
      *
      * @param context
      */
-    public SignatureView(Context context)                               { super(context);        init(); }
-    public SignatureView(Context context, @Nullable AttributeSet attrs) { super(context, attrs); init(); }
+    public SignatureViewOld(Context context)                               { super(context);        init(); }
+    public SignatureViewOld(Context context, @Nullable AttributeSet attrs) { super(context, attrs); init(); }
 
     private void init() {
-      int color = ContextCompat.getColor(getContext(), R.color.colorLine);
+      int color = ContextCompat.getColor(getContext(), android.R.color.black);
 
       paint.setAntiAlias(true);
       paint.setColor(color);
@@ -87,6 +87,7 @@ public class SignatureView extends View {
         canvas.drawPath(this.path, this.paint);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float eventX = event.getX();
