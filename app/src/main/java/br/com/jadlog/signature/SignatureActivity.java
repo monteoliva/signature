@@ -2,35 +2,46 @@ package br.com.jadlog.signature;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OptionsItem;
-import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.ViewById;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 
 import br.com.jadlog.signature.ui.SignatureView;
 
-@EActivity(R.layout.signature_activity)
-@OptionsMenu(R.menu.menu_main)
-public class SignatureActivity extends CordovaActivity {
-    @ViewById(R.id.toolbar)
-    protected Toolbar toolbar;
+public class SignatureActivity extends CordovaActivity implements View.OnClickListener {
+    private Toolbar toolbar;
+    private ActionBar actionBar;
+    private SignatureView signatureView;
+    private Button btnClear;
+    private Button btnSave;
 
-    protected ActionBar actionBar;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    @ViewById(R.id.signature)
-    protected SignatureView signatureView;
+        setContentView(R.layout.signature_activity);
 
-    @AfterViews
-    protected void afterViews() {
-        // toolbar
+        signatureView = findViewById(R.id.signature);
+        btnClear      = findViewById(R.id.btnClear);
+        btnSave       = findViewById(R.id.btnSave);
+
+        actionBar();
+
+        // set Listener
+        btnClear.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
+
+    }
+
+    private void actionBar() {
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
@@ -39,13 +50,7 @@ public class SignatureActivity extends CordovaActivity {
         }
     }
 
-    @Click(R.id.btnClear)
-    protected void clear() {
-        signatureView.clear();
-    }
-
-    @Click(R.id.btnSave)
-    protected void save() {
+    private void save() {
         byte[] hash = signatureView.getHash();
 
         if (hash == null) {
@@ -53,7 +58,7 @@ public class SignatureActivity extends CordovaActivity {
             return;
         }
 
-        Intent intent = new Intent(this, FinallyActivity_.class);
+        Intent intent = new Intent(this, FinallyActivity.class);
                intent.putExtra("HASH", hash);
 
         startActivity(intent);
@@ -61,10 +66,26 @@ public class SignatureActivity extends CordovaActivity {
         overridePendingTransition( R.anim.righttoleft, R.anim.stable );
     }
 
-    @OptionsItem(R.id.action_close)
-    protected void close() {
-        finish();
+    //**********************************************************************************************
+    // Menu Principal
+    //**********************************************************************************************
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_close:
+                finish();
+                break;
+        }
+        return true;
+    }
+    //**********************************************************************************************
 
     private void msg() {
         // abre a janela
@@ -85,5 +106,11 @@ public class SignatureActivity extends CordovaActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { finish(); return false; }
         else                                  { return super.onKeyDown(keyCode, event); }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if      (v == btnClear) { signatureView.clear(); }
+        else if (v == btnSave)  { save(); }
     }
 }
