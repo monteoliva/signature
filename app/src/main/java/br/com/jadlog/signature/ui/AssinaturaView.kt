@@ -1,5 +1,7 @@
 package br.com.jadlog.signature.ui
 
+import java.io.ByteArrayOutputStream
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
@@ -8,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 
-class SignatureView : View {
+class AssinaturaView : View {
     private val paint: Paint = Paint()
     private val path: Path = Path()
     private var lastTouchX: Float = 0f
@@ -16,7 +18,6 @@ class SignatureView : View {
     private val dirtyRect: RectF = RectF()
     private var withSize: Int = 0
     private var heightSize:Int = 0
-    private val encodeImage: EncodeImage = EncodeImage()
 
     companion object {
         private const val STROKE_WIDTH = 20f
@@ -35,21 +36,21 @@ class SignatureView : View {
         val color = ContextCompat.getColor(context, android.R.color.black)
 
         paint.isAntiAlias = true
-        paint.color = color
-        paint.style = Paint.Style.STROKE
-        paint.strokeJoin = Paint.Join.ROUND
+        paint.color       = color
+        paint.style       = Paint.Style.STROKE
+        paint.strokeJoin  = Paint.Join.ROUND
         paint.strokeWidth = STROKE_WIDTH
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        withSize = w
+        withSize  = w
         heightSize = h
     }
 
     val hash: ByteArray?
         get() {
             val bmp = bitmap
-            return if (bmp != null) encodeImage.encodeImage(bmp) else null
+            return if (bmp != null) { encodeImage(bmp) } else { null }
         }
 
     private val bitmap: Bitmap?
@@ -57,9 +58,8 @@ class SignatureView : View {
             val signatureBitmap = Bitmap.createBitmap(withSize, heightSize, Bitmap.Config.ARGB_8888)
             draw(Canvas(signatureBitmap))
             val emptyBitmap = Bitmap.createBitmap(withSize, heightSize, signatureBitmap.config)
-            return if (signatureBitmap.sameAs(emptyBitmap)) {
-                null
-            } else signatureBitmap
+
+            return if (signatureBitmap.sameAs(emptyBitmap)) { null } else { signatureBitmap }
         }
 
     /**
@@ -103,9 +103,9 @@ class SignatureView : View {
             else -> return false
         }
 
-        postInvalidate((dirtyRect.left  - HALF_STROKE_WIDTH).toInt(),
-                       (dirtyRect.top   - HALF_STROKE_WIDTH).toInt(),
-                       (dirtyRect.right + HALF_STROKE_WIDTH).toInt(),
+        postInvalidate((dirtyRect.left   - HALF_STROKE_WIDTH).toInt(),
+                       (dirtyRect.top    - HALF_STROKE_WIDTH).toInt(),
+                       (dirtyRect.right  + HALF_STROKE_WIDTH).toInt(),
                        (dirtyRect.bottom + HALF_STROKE_WIDTH).toInt())
 
         lastTouchX = eventX
@@ -133,5 +133,15 @@ class SignatureView : View {
         dirtyRect.right  = Math.max(lastTouchX, eventX)
         dirtyRect.top    = Math.min(lastTouchY, eventY)
         dirtyRect.bottom = Math.max(lastTouchY, eventY)
+    }
+
+    @SuppressLint("WrongThread")
+    private fun encodeImage(bitmap: Bitmap?): ByteArray? {
+        if (bitmap == null) { return null }
+
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+
+        return stream.toByteArray()
     }
 }

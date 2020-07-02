@@ -14,14 +14,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import br.com.jadlog.signature.ui.SignatureView;
+import org.jetbrains.annotations.NotNull;
+
+import br.com.jadlog.signature.ui.Assinatura;
+import br.com.jadlog.signature.ui.AssinaturaView;
+import br.com.jadlog.signature.ui.OnAssinaturaListener;
 
 public class SignatureActivity extends CordovaActivity implements View.OnClickListener {
     private Toolbar toolbar;
     private ActionBar actionBar;
-    private SignatureView signatureView;
+    private AssinaturaView signatureView;
     private Button btnClear;
     private Button btnSave;
+
+    private Assinatura assinatura;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +45,13 @@ public class SignatureActivity extends CordovaActivity implements View.OnClickLi
         btnClear.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
+        assinatura = new Assinatura.Builder()
+                .context(this)
+                .listener(new OnAssinaturaListener() {
+                    @Override
+                    public void onSuccess(@NotNull byte[] hash) { confirm(hash); }
+                })
+                .build();
     }
 
     private void actionBar() {
@@ -51,8 +64,11 @@ public class SignatureActivity extends CordovaActivity implements View.OnClickLi
     }
 
     private void save() {
-        byte[] hash = signatureView.getHash();
+        assinatura.show();
+        //confirm(signatureView.getHash());
+    }
 
+    private void confirm(byte[] hash) {
         if (hash == null) {
             msg();
             return;
