@@ -10,10 +10,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
+
 import br.com.jadlog.signature.R
 
-class Assinatura private constructor(private val context: Context,
-                                     private val listener: OnAssinaturaListener) {
+class AssinaturaComponent private constructor(private val context: Context,
+                                              private val listener: OnAssinaturaListener) {
     private lateinit var popupView: View
     private lateinit var assinaturaView: AssinaturaView
     private lateinit var popupWindow: PopupWindow
@@ -21,10 +22,11 @@ class Assinatura private constructor(private val context: Context,
     private val activity: AppCompatActivity = context as AppCompatActivity
 
     init {
-        init()
+        initViews()
+        initViewModel()
     }
 
-    private fun init() {
+    private fun initViews() {
         popupView = LayoutInflater.from(activity).inflate(R.layout.assinatura, null)
 
         assinaturaView = popupView.findViewById(R.id.assinaturaView)
@@ -42,9 +44,12 @@ class Assinatura private constructor(private val context: Context,
         popupWindow = PopupWindow(popupView, width, height, true)
     }
 
+    private fun initViewModel() {
+
+    }
+
     fun show() {
         if (!popupWindow.isShowing) {
-            Log.d("TESTE", "Showing")
             activity.runOnUiThread(Thread(
                     Runnable { popupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0) }
             ))
@@ -72,8 +77,8 @@ class Assinatura private constructor(private val context: Context,
             return this
         }
 
-        fun build(): Assinatura {
-            return Assinatura(context, listener)
+        fun build(): AssinaturaComponent {
+            return AssinaturaComponent(context, listener)
         }
     }
 }

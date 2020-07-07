@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true">
         <activity
-            android:name=".SignatureActivity"
+            android:name=".view.SignatureActivity"
             android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FinallyActivity"
+            android:name=".view.FinallyActivity"
             android:screenOrientation="sensor" />
     </application>
 
