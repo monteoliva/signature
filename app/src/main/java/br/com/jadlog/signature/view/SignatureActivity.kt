@@ -4,48 +4,28 @@ import android.content.Intent
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 
-import br.com.jadlog.signature.R
-import br.com.jadlog.signature.ui.AssinaturaComponent
-import br.com.jadlog.signature.ui.AssinaturaView
-import br.com.jadlog.signature.ui.AssinaturaViewModel
-import br.com.jadlog.signature.ui.OnAssinaturaListener
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SignatureActivity : BaseActivity(R.layout.signature_activity), View.OnClickListener {
+import br.com.jadlog.signature.R
+import br.com.jadlog.signature.ui.AssinaturaComponent
+import br.com.jadlog.signature.ui.AssinaturaViewModel
+
+class SignatureActivity : BaseActivity(R.layout.signature_activity) {
     private lateinit var toolbar: Toolbar
     private lateinit var actionBar: ActionBar
-    private lateinit var signatureView: AssinaturaView
-    private lateinit var btnClear: Button
-    private lateinit var btnSave: Button
+    private lateinit var btnOpen: Button
     private lateinit var assinatura: AssinaturaComponent
 
     private val viewModel: AssinaturaViewModel by viewModel()
 
     override fun initViews() {
+        assinatura = findViewById(R.id.assinaturaComponent)
         actionBar()
-
-        signatureView = findViewById(R.id.signatureView)
-        btnClear = findViewById(R.id.btnClear)
-        btnSave = findViewById(R.id.btnSave)
-
-        // set Listener
-        btnClear.setOnClickListener(this)
-        btnSave.setOnClickListener(this)
-
-        assinatura = AssinaturaComponent.Builder()
-                .context(this)
-                .listener(object : OnAssinaturaListener {
-                    override fun onSuccess(hash: ByteArray) {
-                        confirm(hash)
-                    }
-                })
-                .build()
     }
 
     override fun initViewModel() {
@@ -56,11 +36,6 @@ class SignatureActivity : BaseActivity(R.layout.signature_activity), View.OnClic
         setSupportActionBar(toolbar)
         actionBar = supportActionBar!!
         actionBar.title = ""
-    }
-
-    private fun save() {
-        assinatura.show()
-        //confirm(signatureView.getHash());
     }
 
     private fun confirm(hash: ByteArray?) {
@@ -87,6 +62,7 @@ class SignatureActivity : BaseActivity(R.layout.signature_activity), View.OnClic
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> finish()
+            R.id.action_open -> assinatura.show()
         }
         return true
     }
@@ -111,13 +87,6 @@ class SignatureActivity : BaseActivity(R.layout.signature_activity), View.OnClic
         }
         else {
             super.onKeyDown(keyCode, event)
-        }
-    }
-
-    override fun onClick(v: View) {
-        when(v) {
-            btnClear -> signatureView.clear()
-            btnSave  -> save()
         }
     }
 }

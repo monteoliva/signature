@@ -1,84 +1,64 @@
 package br.com.jadlog.signature.ui
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.util.AttributeSet
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.PopupWindow
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 import br.com.jadlog.signature.R
 
-class AssinaturaComponent private constructor(private val context: Context,
-                                              private val listener: OnAssinaturaListener) {
-    private lateinit var popupView: View
+class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+    private lateinit var view: View
     private lateinit var assinaturaView: AssinaturaView
-    private lateinit var popupWindow: PopupWindow
-
-    private val activity: AppCompatActivity = context as AppCompatActivity
+    private var listener: OnAssinaturaListener? = null
 
     init {
-        initViews()
-        initViewModel()
+        Log.d("LIFECYCLE", "AssinaturaComponent - init")
+        initViews(context, attrs)
     }
 
-    private fun initViews() {
-        popupView = LayoutInflater.from(activity).inflate(R.layout.assinatura, null)
+    private fun initViews(context: Context, attrs: AttributeSet) {
+        setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
 
-        assinaturaView = popupView.findViewById(R.id.assinaturaView)
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        popupView.findViewById<ImageView>(R.id.btnClose).setOnClickListener { hide() }
-        popupView.findViewById<Button>(R.id.btnClear).setOnClickListener { clear() }
-        popupView.findViewById<Button>(R.id.btnSave).setOnClickListener {
-            listener.onSuccess(assinaturaView.hash!!)
+        view = inflater.inflate(R.layout.assinatura, this)
+
+        assinaturaView = view.findViewById(R.id.assinaturaView)
+
+        view.findViewById<ImageView>(R.id.btnClose).setOnClickListener { hide() }
+        view.findViewById<Button>(R.id.btnClear).setOnClickListener { assinaturaView.clear() }
+        view.findViewById<Button>(R.id.btnSave).setOnClickListener {
+            if (listener != null) {
+                listener?.apply {
+                    onBitmap(bitmap)
+                    onByteArray(byteArray)
+                    onHash(hash)
+                }
+            }
             hide()
         }
-
-        val width: Int  = LinearLayout.LayoutParams.MATCH_PARENT
-        val height: Int = LinearLayout.LayoutParams.MATCH_PARENT
-
-        popupWindow = PopupWindow(popupView, width, height, true)
     }
 
-    private fun initViewModel() {
+    fun show() { view.visibility = View.VISIBLE }
+    fun hide() { view.visibility = View.GONE    }
 
-    }
+    val bitmap: Bitmap?
+        get() = assinaturaView.bitmap
 
-    fun show() {
-        if (!popupWindow.isShowing) {
-            activity.runOnUiThread(Thread(
-                    Runnable { popupWindow.showAtLocation(popupView, Gravity.TOP, 0, 0) }
-            ))
-        }
-    }
+    val byteArray: ByteArray?
+        get() = assinaturaView.byteArray
 
-    fun hide() { popupWindow.dismiss() }
+    val hash: String?
+        get() = assinaturaView.hash
 
-    fun clear() { assinaturaView.clear() }
-
-    /**************************************************************************************
-     * Builder (Design Patterns)
-     */
-    class Builder {
-        private lateinit var context: Context
-        private lateinit var listener: OnAssinaturaListener
-
-        fun context(context: Context): Builder {
-            this.context = context
-            return this
-        }
-
-        fun listener(listener: OnAssinaturaListener): Builder {
-            this.listener = listener
-            return this
-        }
-
-        fun build(): AssinaturaComponent {
-            return AssinaturaComponent(context, listener)
-        }
+    fun setOnAssinaturaListener(listener: OnAssinaturaListener) {
+        this.listener = listener
     }
 }

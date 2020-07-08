@@ -13,9 +13,7 @@ class FinallyActivity : BaseActivity(R.layout.finally_activity) {
     private lateinit var actionBar: ActionBar
     private lateinit var imageView: ImageView
 
-    override fun onStart() {
-        super.onStart()
-
+    override fun initViews() {
         val hash = intent.getByteArrayExtra("HASH")
         val bitmap = BitmapFactory.decodeByteArray(hash, 0, hash.size)
 
@@ -23,6 +21,9 @@ class FinallyActivity : BaseActivity(R.layout.finally_activity) {
         imageView.setImageBitmap(bitmap)
 
         actionBar()
+    }
+
+    override fun initViewModel() {
     }
 
     private fun actionBar() {

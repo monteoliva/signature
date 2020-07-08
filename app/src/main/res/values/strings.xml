@@ -4,6 +4,7 @@
     <string name="signature_btn1">Limpar</string>
     <string name="signature_btn12">Confirmar</string>
     <string name="action_close">Salvar</string>
+    <string name="action_open">Abrir</string>
     <string name="finally_title">RESULTADO</string>
 
     <string name="signature_error_title">Atenção</string>

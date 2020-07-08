@@ -1,7 +1,5 @@
 package br.com.jadlog.signature.ui
 
-import java.io.ByteArrayOutputStream
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
@@ -10,7 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 
-class AssinaturaView : View {
+class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint: Paint = Paint()
     private val path: Path = Path()
     private var lastTouchX: Float = 0f
@@ -24,36 +22,40 @@ class AssinaturaView : View {
         private const val HALF_STROKE_WIDTH = STROKE_WIDTH / 2
     }
 
-    /**
-     * Constructor
-     *
-     * @param context
-     */
-    constructor(context: Context?) : super(context) { init() }
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { init() }
+    init {
+        initViews(context, attrs)
+    }
 
-    private fun init() {
-        val color = ContextCompat.getColor(context, android.R.color.black)
+    private fun initViews(context: Context, attrs: AttributeSet) {
+        val colorLocal = ContextCompat.getColor(context, android.R.color.black)
 
-        paint.isAntiAlias = true
-        paint.color       = color
-        paint.style       = Paint.Style.STROKE
-        paint.strokeJoin  = Paint.Join.ROUND
-        paint.strokeWidth = STROKE_WIDTH
+        paint.apply {
+            isAntiAlias = true
+            color       = colorLocal
+            style       = Paint.Style.STROKE
+            strokeJoin  = Paint.Join.ROUND
+            strokeWidth = STROKE_WIDTH
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        withSize  = w
+        withSize   = w
         heightSize = h
     }
 
-    val hash: ByteArray?
+    val byteArray: ByteArray?
         get() {
-            val bmp = bitmap
-            return if (bmp != null) { encodeImage(bmp) } else { null }
+            val bmp: Bitmap? = bitmap
+            return if (bmp != null) { EncodeImage.encodeImage(bmp) } else { null }
         }
 
-    private val bitmap: Bitmap?
+    val hash: String?
+        get() {
+            val bytes: ByteArray? = byteArray
+            return if (bytes == null) { null } else { EncodeImage.encodeImage(bytes) }
+        }
+
+    val bitmap: Bitmap?
         get() {
             val signatureBitmap = Bitmap.createBitmap(withSize, heightSize, Bitmap.Config.ARGB_8888)
             draw(Canvas(signatureBitmap))
@@ -133,15 +135,5 @@ class AssinaturaView : View {
         dirtyRect.right  = Math.max(lastTouchX, eventX)
         dirtyRect.top    = Math.min(lastTouchY, eventY)
         dirtyRect.bottom = Math.max(lastTouchY, eventY)
-    }
-
-    @SuppressLint("WrongThread")
-    private fun encodeImage(bitmap: Bitmap?): ByteArray? {
-        if (bitmap == null) { return null }
-
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
-
-        return stream.toByteArray()
     }
 }
