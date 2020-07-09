@@ -6,8 +6,6 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-  <include layout="@layout/signature_action_bar" />
-
   <br.com.jadlog.signature.ui.AssinaturaComponent
       android:id="@+id/assinaturaComponent"
       android:layout_width="match_parent"

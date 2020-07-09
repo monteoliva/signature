@@ -6,7 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-import br.com.jadlog.signature.view.SignatureModule
+import br.com.jadlog.signature.view.MainModule
 
 class AssinaturaApplication : Application() {
 
@@ -16,6 +16,6 @@ class AssinaturaApplication : Application() {
             androidLogger()
             androidContext(this@AssinaturaApplication)
         }
-        SignatureModule.loadModule()
+        MainModule.loadModule()
     }
 }

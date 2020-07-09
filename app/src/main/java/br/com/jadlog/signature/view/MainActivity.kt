@@ -1,42 +1,41 @@
 package br.com.jadlog.signature.view
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 
 import org.koin.android.viewmodel.ext.android.viewModel
 
 import br.com.jadlog.signature.R
 import br.com.jadlog.signature.ui.AssinaturaComponent
-import br.com.jadlog.signature.ui.AssinaturaViewModel
+import br.com.jadlog.signature.ui.OnAssinaturaListener
 
-class SignatureActivity : BaseActivity(R.layout.signature_activity) {
-    private lateinit var toolbar: Toolbar
-    private lateinit var actionBar: ActionBar
-    private lateinit var btnOpen: Button
-    private lateinit var assinatura: AssinaturaComponent
+class MainActivity : BaseActivity(R.layout.main_activity) {
+    private lateinit var assinaturaComponent: AssinaturaComponent
 
-    private val viewModel: AssinaturaViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel()
 
     override fun initViews() {
-        assinatura = findViewById(R.id.assinaturaComponent)
-        actionBar()
+        assinaturaComponent = findViewById(R.id.assinaturaComponent)
+        assinaturaComponent.setOnAssinaturaListener(
+                object : OnAssinaturaListener {
+                    override fun onBitmap(bitmap: Bitmap?) {
+                    }
+
+                    override fun onByteArray(byteArray: ByteArray?) {
+                        confirm(byteArray)
+                    }
+
+                    override fun onHash(hash: String?) {
+                    }
+                }
+        )
     }
 
-    override fun initViewModel() {
-    }
-
-    private fun actionBar() {
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        actionBar = supportActionBar!!
-        actionBar.title = ""
-    }
+    override fun initViewModel() {}
 
     private fun confirm(hash: ByteArray?) {
         if (hash == null) {
@@ -62,10 +61,12 @@ class SignatureActivity : BaseActivity(R.layout.signature_activity) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_close -> finish()
-            R.id.action_open -> assinatura.show()
+            R.id.action_open  -> nada() //viewModel.assinaturaComponentLiveData.value!!.show()
         }
         return true
     }
+
+    private fun nada() {}
 
     //**********************************************************************************************
     private fun msg() {

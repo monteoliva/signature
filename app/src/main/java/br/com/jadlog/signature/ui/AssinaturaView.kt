@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 
 class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint: Paint = Paint()
@@ -17,18 +20,21 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
     private var withSize: Int = 0
     private var heightSize:Int = 0
 
+    private val acitivity: AppCompatActivity = context as AppCompatActivity
+    private val colorLocal: Int = ContextCompat.getColor(context, android.R.color.black)
+    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaViewModel::class.java)
+
     companion object {
         private const val STROKE_WIDTH = 20f
         private const val HALF_STROKE_WIDTH = STROKE_WIDTH / 2
     }
 
     init {
-        initViews(context, attrs)
+        initViews()
+        initViewModel()
     }
 
-    private fun initViews(context: Context, attrs: AttributeSet) {
-        val colorLocal = ContextCompat.getColor(context, android.R.color.black)
-
+    private fun initViews() {
         paint.apply {
             isAntiAlias = true
             color       = colorLocal
@@ -36,6 +42,10 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
             strokeJoin  = Paint.Join.ROUND
             strokeWidth = STROKE_WIDTH
         }
+    }
+
+    fun initViewModel() {
+        viewModel.setPathLiveData(path)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -68,13 +78,14 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
      * clear signature canvas
      */
     fun clear() {
-        path.reset()
+        viewModel.path!!.reset()
         this.postInvalidate()
     }
 
     // all touch events during the drawing
     override fun onDraw(canvas: Canvas) {
-        canvas.drawPath(path, paint)
+        Log.d("COMPONENT", "onDraw")
+        canvas.drawPath(viewModel.path!!, paint)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -85,8 +96,8 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
             MotionEvent.ACTION_DOWN -> {
                 lastTouchX = eventX
                 lastTouchY = eventY
-                path.moveTo(eventX, eventY)
-                path.lineTo(eventX, eventY)
+                viewModel.path!!.moveTo(eventX, eventY)
+                viewModel.path!!.lineTo(eventX, eventY)
                 return true
             }
             MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
@@ -97,10 +108,10 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
                     val historicalX = event.getHistoricalX(i)
                     val historicalY = event.getHistoricalY(i)
                     expandDirtyRect(historicalX, historicalY)
-                    path.lineTo(historicalX, historicalY)
+                    viewModel.path!!.lineTo(historicalX, historicalY)
                     i++
                 }
-                path.lineTo(eventX, eventY)
+                viewModel.path!!.lineTo(eventX, eventY)
             }
             else -> return false
         }

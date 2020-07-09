@@ -9,8 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import br.com.jadlog.signature.R
 
 class FinallyActivity : BaseActivity(R.layout.finally_activity) {
-    private lateinit var toolbar: Toolbar
-    private lateinit var actionBar: ActionBar
     private lateinit var imageView: ImageView
 
     override fun initViews() {
@@ -27,17 +25,16 @@ class FinallyActivity : BaseActivity(R.layout.finally_activity) {
     }
 
     private fun actionBar() {
-        // toolbar
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        actionBar = supportActionBar!!
-        actionBar.title = ""
-        actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setHomeButtonEnabled(true)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        val actionBar: ActionBar = supportActionBar!!
+            actionBar.title = ""
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeButtonEnabled(true)
     }
 
     private fun back() {
-        startActivity(Intent(this, SignatureActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
         overridePendingTransition(R.anim.lefttoright, R.anim.stable)
     }
