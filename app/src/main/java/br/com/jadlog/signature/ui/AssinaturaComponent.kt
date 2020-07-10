@@ -11,15 +11,18 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 
 import br.com.jadlog.signature.R
 
 class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     private lateinit var view: View
-    private lateinit var assinaturaView: DrawView
+    private lateinit var drawView: DrawView
+    private lateinit var layoutComponent: LinearLayout
     private var listener: OnAssinaturaListener? = null
 
     private val acitivity: AppCompatActivity = context as AppCompatActivity
+    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaViewModel::class.java)
 
     init {
         initViews()
@@ -33,11 +36,12 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
 
         view = inflater.inflate(R.layout.assinatura_component, this)
 
-        assinaturaView = view.findViewById(R.id.assinaturaView)
+        layoutComponent = view.findViewById(R.id.layoutComponent)
+        drawView = view.findViewById(R.id.drawView)
 
         view.findViewById<ImageView>(R.id.btnClose).setOnClickListener { hide() }
         view.findViewById<AppCompatButton>(R.id.btnClear).setOnClickListener {
-            assinaturaView.clear()
+            drawView.clear()
         }
         view.findViewById<AppCompatButton>(R.id.btnSave).setOnClickListener {
             if (listener != null) {
@@ -51,17 +55,24 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
         }
     }
 
-    private fun initViewModel() {}
+    private fun initViewModel() {
+        val orientation: Int = acitivity.resources.configuration.orientation
+        viewModel.setViewLiveData(layoutComponent)
+        viewModel.setOrientationLiveData(orientation)
+    }
 
     fun show() {
+        viewModel.show()
         acitivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        view.visibility = View.VISIBLE
     }
-    fun hide() { view.visibility = View.GONE }
+    fun hide() {
+        viewModel.hide()
+        acitivity.requestedOrientation = viewModel.orientation
+    }
 
-    val bitmap: Bitmap?       get() = assinaturaView.bitmap
-    val byteArray: ByteArray? get() = assinaturaView.byteArray
-    val hash: String?         get() = assinaturaView.hash
+    val bitmap: Bitmap?       get() = drawView.bitmap
+    val byteArray: ByteArray? get() = drawView.byteArray
+    val hash: String?         get() = drawView.hash
 
     fun setOnAssinaturaListener(listener: OnAssinaturaListener) {
         this.listener = listener

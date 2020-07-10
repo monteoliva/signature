@@ -3,19 +3,16 @@ package br.com.jadlog.signature.view
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.KeyEvent
-import android.widget.ImageView
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.finally_activity.*
+
 import br.com.jadlog.signature.R
 
 class FinallyActivity : BaseActivity(R.layout.finally_activity) {
-    private lateinit var imageView: ImageView
-
     override fun initViews() {
         val hash = intent.getByteArrayExtra("HASH")
         val bitmap = BitmapFactory.decodeByteArray(hash, 0, hash.size)
 
-        imageView = findViewById(R.id.imageView)
         imageView.setImageBitmap(bitmap)
 
         actionBar()

@@ -5,24 +5,18 @@ import android.graphics.Bitmap
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import kotlinx.android.synthetic.main.main_activity.*
 
 import org.koin.android.viewmodel.ext.android.viewModel
 
 import br.com.jadlog.signature.R
-import br.com.jadlog.signature.ui.Assinatura
-import br.com.jadlog.signature.ui.AssinaturaComponent
 import br.com.jadlog.signature.ui.OnAssinaturaListener
-import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : BaseActivity(R.layout.main_activity) {
-    private lateinit var assinaturaComponent: AssinaturaComponent
-
     private val viewModel: MainViewModel by viewModel()
 
     override fun initViews() {
-        assinaturaComponent = findViewById(R.id.assinaturaComponent)
         assinaturaComponent.setOnAssinaturaListener(
                 object : OnAssinaturaListener {
                     override fun onBitmap(bitmap: Bitmap?) {
@@ -37,7 +31,7 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
                 }
         )
 
-        btnAssinatura.setOnClickListener { assinaturaComponent.show() }
+        btnAssinatura.setOnClickListener { open() }
     }
 
     override fun initViewModel() {}
@@ -56,7 +50,6 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
 
     private fun open() {
         assinaturaComponent.show()
-//        Assinatura.getInstance(this).show()
     }
 
     //**********************************************************************************************
