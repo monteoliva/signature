@@ -4,16 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 
-class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint: Paint = Paint()
-    private val path: Path = Path()
     private var lastTouchX: Float = 0f
     private var lastTouchY: Float = 0f
     private val dirtyRect: RectF = RectF()
@@ -22,7 +20,7 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
 
     private val acitivity: AppCompatActivity = context as AppCompatActivity
     private val colorLocal: Int = ContextCompat.getColor(context, android.R.color.black)
-    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaViewModel::class.java)
+    private val viewModel = ViewModelProvider(acitivity).get(DrawViewModel::class.java)
 
     companion object {
         private const val STROKE_WIDTH = 20f
@@ -45,7 +43,7 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
     }
 
     fun initViewModel() {
-        viewModel.setPathLiveData(path)
+        viewModel.setPathLiveData(Path())
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -78,14 +76,13 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
      * clear signature canvas
      */
     fun clear() {
-        viewModel.path!!.reset()
+        viewModel.path.reset()
         this.postInvalidate()
     }
 
     // all touch events during the drawing
     override fun onDraw(canvas: Canvas) {
-        Log.d("COMPONENT", "onDraw")
-        canvas.drawPath(viewModel.path!!, paint)
+        canvas.drawPath(viewModel.path, paint)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -96,8 +93,8 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
             MotionEvent.ACTION_DOWN -> {
                 lastTouchX = eventX
                 lastTouchY = eventY
-                viewModel.path!!.moveTo(eventX, eventY)
-                viewModel.path!!.lineTo(eventX, eventY)
+                viewModel.path.moveTo(eventX, eventY)
+                viewModel.path.lineTo(eventX, eventY)
                 return true
             }
             MotionEvent.ACTION_MOVE, MotionEvent.ACTION_UP -> {
@@ -108,10 +105,10 @@ class AssinaturaView(context: Context, attrs: AttributeSet) : View(context, attr
                     val historicalX = event.getHistoricalX(i)
                     val historicalY = event.getHistoricalY(i)
                     expandDirtyRect(historicalX, historicalY)
-                    viewModel.path!!.lineTo(historicalX, historicalY)
+                    viewModel.path.lineTo(historicalX, historicalY)
                     i++
                 }
-                viewModel.path!!.lineTo(eventX, eventY)
+                viewModel.path.lineTo(eventX, eventY)
             }
             else -> return false
         }

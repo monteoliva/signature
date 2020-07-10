@@ -1,12 +1,14 @@
 package br.com.jadlog.signature.ui
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 
@@ -14,8 +16,10 @@ import br.com.jadlog.signature.R
 
 class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     private lateinit var view: View
-    private lateinit var assinaturaView: AssinaturaView
+    private lateinit var assinaturaView: DrawView
     private var listener: OnAssinaturaListener? = null
+
+    private val acitivity: AppCompatActivity = context as AppCompatActivity
 
     init {
         initViews()
@@ -28,7 +32,6 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         view = inflater.inflate(R.layout.assinatura_component, this)
-        view.rotation = 0f
 
         assinaturaView = view.findViewById(R.id.assinaturaView)
 
@@ -48,10 +51,12 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
         }
     }
 
-    fun initViewModel() {
-    }
+    private fun initViewModel() {}
 
-    fun show() { view.visibility = View.VISIBLE }
+    fun show() {
+        acitivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        view.visibility = View.VISIBLE
+    }
     fun hide() { view.visibility = View.GONE }
 
     val bitmap: Bitmap?       get() = assinaturaView.bitmap

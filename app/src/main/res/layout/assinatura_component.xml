@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/assinatura_box">
-        <br.com.jadlog.signature.ui.AssinaturaView
+        <br.com.jadlog.signature.ui.DrawView
             android:id="@+id/assinaturaView"
             android:layout_width="match_parent"
             android:layout_height="0dp"

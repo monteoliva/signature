@@ -1,21 +1,21 @@
 package br.com.jadlog.signature.ui
 
-import android.graphics.Path
 import android.util.Log
+import android.widget.PopupWindow
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AssinaturaViewModel : ViewModel() {
-    private val pathLiveData: MutableLiveData<Path> by lazy {
-        MutableLiveData<Path>()
+    private val popupLiveData: MutableLiveData<PopupWindow> by lazy {
+        MutableLiveData<PopupWindow>()
     }
 
-    fun setPathLiveData(path: Path) {
-        if (pathLiveData.value == null) {
-            Log.d("COMPONENT", "new pathLiveData")
-            pathLiveData.postValue(path)
+    fun setPopupLiveData(popupWindow: PopupWindow) {
+        if (popupLiveData.value == null) {
+            Log.d("COMPONENT", "new popupLiveData")
+            popupLiveData.postValue(popupWindow)
         }
     }
 
-    val path: Path? get() = pathLiveData.value!!
+    val popupWindow: PopupWindow? get() = popupLiveData.value!!
 }
