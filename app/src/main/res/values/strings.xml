@@ -10,4 +10,5 @@
     <string name="signature_error_title">Atenção</string>
     <string name="signature_error_msg">Favor desenhar sua assinatura.</string>
     <string name="txt_description">Assinatura do cliente/responsável</string>
+    <string name="txt_open">OPEN</string>
 </resources>
