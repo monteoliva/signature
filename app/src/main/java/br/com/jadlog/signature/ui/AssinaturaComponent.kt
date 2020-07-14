@@ -51,7 +51,6 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
                     onHash(hash)
                 }
             }
-            hide()
         }
     }
 
@@ -63,7 +62,9 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
 
     fun show() {
         viewModel.show()
-        acitivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        if (viewModel.orientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            acitivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
     }
     fun hide() {
         viewModel.hide()

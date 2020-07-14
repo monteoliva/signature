@@ -23,6 +23,7 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
                     }
 
                     override fun onByteArray(byteArray: ByteArray?) {
+                        assinaturaComponent.hide()
                         confirm(byteArray)
                     }
 
