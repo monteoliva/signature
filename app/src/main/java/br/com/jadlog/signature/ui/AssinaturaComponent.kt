@@ -22,7 +22,7 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
     private var listener: OnAssinaturaListener? = null
 
     private val acitivity: AppCompatActivity = context as AppCompatActivity
-    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaViewModel::class.java)
+    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaComponentViewModel::class.java)
 
     init {
         initViews()

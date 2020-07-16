@@ -5,7 +5,7 @@ import android.widget.LinearLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class AssinaturaViewModel : ViewModel() {
+class AssinaturaComponentViewModel : ViewModel() {
     private val hideLiveData: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
