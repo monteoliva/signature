@@ -1,14 +1,17 @@
-package br.com.jadlog.signature.view
+package br.com.jadlog.signature.view.result
 
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.KeyEvent
 import androidx.appcompat.app.ActionBar
-import kotlinx.android.synthetic.main.finally_activity.*
+
+import kotlinx.android.synthetic.main.result_activity.*
 
 import br.com.jadlog.signature.R
+import br.com.jadlog.signature.view.BaseActivity
+import br.com.jadlog.signature.view.main.MainActivity
 
-class FinallyActivity : BaseActivity(R.layout.finally_activity) {
+class ResultActivity : BaseActivity(R.layout.result_activity) {
     override fun initViews() {
         val hash = intent.getByteArrayExtra("HASH")
         val bitmap = BitmapFactory.decodeByteArray(hash, 0, hash.size)
@@ -25,9 +28,11 @@ class FinallyActivity : BaseActivity(R.layout.finally_activity) {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         val actionBar: ActionBar = supportActionBar!!
-            actionBar.title = ""
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeButtonEnabled(true)
+            actionBar.apply {
+                title = ""
+                setDisplayHomeAsUpEnabled(true)
+                setHomeButtonEnabled(true)
+            }
     }
 
     private fun back() {

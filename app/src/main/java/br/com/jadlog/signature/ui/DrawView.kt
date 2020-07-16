@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+internal class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint: Paint = Paint()
     private var lastTouchX: Float = 0f
     private var lastTouchY: Float = 0f

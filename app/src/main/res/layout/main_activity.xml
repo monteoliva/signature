@@ -8,13 +8,13 @@
     android:background="@android:color/white">
 
   <Button
-      android:id="@+id/btnAssinatura"
+      android:id="@+id/btnSignature"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/txt_open" />
 
-  <br.com.jadlog.signature.ui.AssinaturaComponent
-      android:id="@+id/assinaturaComponent"
+  <br.com.jadlog.signature.ui.SignatureComponent
+      android:id="@+id/signatureComponent"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:visibility="visible" />

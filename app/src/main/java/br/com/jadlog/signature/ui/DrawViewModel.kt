@@ -4,7 +4,7 @@ import android.graphics.Path
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DrawViewModel : ViewModel() {
+internal class DrawViewModel : ViewModel() {
     private val pathLiveData: MutableLiveData<Path> by lazy {
         MutableLiveData<Path>()
     }

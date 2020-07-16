@@ -1,4 +1,4 @@
-package br.com.jadlog.signature.view
+package br.com.jadlog.signature.view.main
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -6,24 +6,27 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+
 import kotlinx.android.synthetic.main.main_activity.*
 
 import org.koin.android.viewmodel.ext.android.viewModel
 
 import br.com.jadlog.signature.R
-import br.com.jadlog.signature.ui.OnAssinaturaListener
+import br.com.jadlog.signature.ui.OnSignatureListener
+import br.com.jadlog.signature.view.BaseActivity
+import br.com.jadlog.signature.view.result.ResultActivity
 
 class MainActivity : BaseActivity(R.layout.main_activity) {
     private val viewModel: MainViewModel by viewModel()
 
     override fun initViews() {
-        assinaturaComponent.setOnAssinaturaListener(
-                object : OnAssinaturaListener {
+        signatureComponent.setOnAssinaturaListener(
+                object : OnSignatureListener {
                     override fun onBitmap(bitmap: Bitmap?) {
                     }
 
                     override fun onByteArray(byteArray: ByteArray?) {
-                        assinaturaComponent.hide()
+                        signatureComponent.hide()
                         confirm(byteArray)
                     }
 
@@ -32,7 +35,7 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
                 }
         )
 
-        btnAssinatura.setOnClickListener { open() }
+        btnSignature.setOnClickListener { open() }
     }
 
     override fun initViewModel() {}
@@ -42,7 +45,7 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
             msg()
             return
         }
-        val intent = Intent(this, FinallyActivity::class.java)
+        val intent = Intent(this, ResultActivity::class.java)
             intent.putExtra("HASH", hash)
         startActivity(intent)
         finish()
@@ -50,7 +53,7 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
     }
 
     private fun open() {
-        assinaturaComponent.show()
+        signatureComponent.show()
     }
 
     //**********************************************************************************************
@@ -74,13 +77,13 @@ class MainActivity : BaseActivity(R.layout.main_activity) {
     private fun msg() {
         // abre a janela
         val dialog = AlertDialog.Builder(this, R.style.AlertDialogThemeMsg)
-            dialog.setTitle(R.string.signature_error_title)
-            dialog.setMessage(R.string.signature_error_msg)
-            dialog.setCancelable(false)
-            dialog.setNeutralButton("OK") { dialog, whichButton -> }
-
-        // show the Dialog
-        dialog.create().show()
+            dialog.apply {
+                setTitle(R.string.signature_error_title)
+                setMessage(R.string.signature_error_msg)
+                setCancelable(false)
+                setNeutralButton("OK") { dialog, whichButton -> }
+                create().show()
+            }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

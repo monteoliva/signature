@@ -15,14 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 
 import br.com.jadlog.signature.R
 
-class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
+class SignatureComponent(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
     private lateinit var view: View
     private lateinit var drawView: DrawView
     private lateinit var layoutComponent: LinearLayout
-    private var listener: OnAssinaturaListener? = null
+    private var listener: OnSignatureListener? = null
 
-    private val acitivity: AppCompatActivity = context as AppCompatActivity
-    private val viewModel = ViewModelProvider(acitivity).get(AssinaturaComponentViewModel::class.java)
+    private val activity: AppCompatActivity = context as AppCompatActivity
+    private val viewModel = ViewModelProvider(activity).get(SignatureComponentViewModel::class.java)
 
     init {
         initViews()
@@ -35,47 +35,50 @@ class AssinaturaComponent(context: Context, attrs: AttributeSet) : LinearLayout(
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         view = inflater.inflate(R.layout.assinatura_component, this)
+        view.apply {
+            drawView        = findViewById(R.id.drawView)
+            layoutComponent = findViewById(R.id.layoutComponent)
 
-        layoutComponent = view.findViewById(R.id.layoutComponent)
-        drawView = view.findViewById(R.id.drawView)
-
-        view.findViewById<ImageView>(R.id.btnClose).setOnClickListener { hide() }
-        view.findViewById<AppCompatButton>(R.id.btnClear).setOnClickListener {
-            drawView.clear()
-        }
-        view.findViewById<AppCompatButton>(R.id.btnSave).setOnClickListener {
-            if (listener != null) {
-                listener?.apply {
-                    onBitmap(bitmap)
-                    onByteArray(byteArray)
-                    onHash(hash)
+            findViewById<ImageView>(R.id.btnClose).setOnClickListener { hide() }
+            findViewById<AppCompatButton>(R.id.btnClear).setOnClickListener {
+                drawView.clear()
+            }
+            findViewById<AppCompatButton>(R.id.btnSave).setOnClickListener {
+                if (listener != null) {
+                    listener?.apply {
+                        onBitmap(bitmap)
+                        onByteArray(byteArray)
+                        onHash(hash)
+                    }
                 }
             }
         }
     }
 
     private fun initViewModel() {
-        val orientation: Int = acitivity.resources.configuration.orientation
-        viewModel.setViewLiveData(layoutComponent)
-        viewModel.setOrientationLiveData(orientation)
+        val orientation: Int = activity.resources.configuration.orientation
+        viewModel.apply {
+            setViewLiveData(layoutComponent)
+            setOrientationLiveData(orientation)
+        }
     }
 
     fun show() {
         viewModel.show()
         if (viewModel.orientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            acitivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
     }
     fun hide() {
         viewModel.hide()
-        acitivity.requestedOrientation = viewModel.orientation
+        activity.requestedOrientation = viewModel.orientation
     }
 
     val bitmap: Bitmap?       get() = drawView.bitmap
     val byteArray: ByteArray? get() = drawView.byteArray
     val hash: String?         get() = drawView.hash
 
-    fun setOnAssinaturaListener(listener: OnAssinaturaListener) {
+    fun setOnAssinaturaListener(listener: OnSignatureListener) {
         this.listener = listener
     }
 }

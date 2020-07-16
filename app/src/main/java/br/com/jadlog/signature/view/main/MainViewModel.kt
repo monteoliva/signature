@@ -1,4 +1,4 @@
-package br.com.jadlog.signature.view
+package br.com.jadlog.signature.view.main
 
 import androidx.lifecycle.ViewModel
 

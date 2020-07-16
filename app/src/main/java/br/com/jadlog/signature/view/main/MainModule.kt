@@ -1,4 +1,4 @@
-package br.com.jadlog.signature.view
+package br.com.jadlog.signature.view.main
 
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
