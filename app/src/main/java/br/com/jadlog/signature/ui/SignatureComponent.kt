@@ -65,13 +65,13 @@ class SignatureComponent(context: Context, attrs: AttributeSet) : LinearLayout(c
 
     fun show() {
         viewModel.show()
-        if (viewModel.orientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
+//        if (viewModel.orientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+//            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+//        }
     }
     fun hide() {
         viewModel.hide()
-        activity.requestedOrientation = viewModel.orientation
+//        activity.requestedOrientation = viewModel.orientation
     }
 
     val bitmap: Bitmap?       get() = drawView.bitmap
